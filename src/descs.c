@@ -56,6 +56,15 @@
 
 #include "descs.h"
 
+// prool begin
+// code for full 8bit characters
+int isprool(char c)
+{
+if ((c<32)&&(c>=0)) return 0;
+return 1;
+}
+// prool end
+
 #if defined(unix)
 int init_socket (int port) {
     static struct sockaddr_in sa_zero;
@@ -378,7 +387,8 @@ void read_from_buffer (DESCRIPTOR_DATA * d) {
 
         if (d->inbuf[i] == '\b' && k > 0)
             --k;
-        else if (isascii (d->inbuf[i]) && isprint (d->inbuf[i]))
+        //else if (isascii (d->inbuf[i]) && isprint (d->inbuf[i]))
+        else if (isprool (d->inbuf[i]) ) // prool: enable full 8 bit character (for UTF-8, koi8-r and other 8bit codetables)
             d->incomm[k++] = d->inbuf[i];
     }
 
